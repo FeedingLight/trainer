@@ -7,10 +7,11 @@
    2) расширить интерфейс Logger_base (можно не менять и посылать сообщение функцией send, заворачивая руками)
    3) добавить обработку нового типа сообщения в реализацию workOnReceivedMessage
 
-   to do, баги:
-   - время раздупления = завершения логгера после послания сигнала о необходимости завершения = 1 секунда - зашито константой внутрь логгера
+   to do:
+   - для добавления новых типов сообщений нужно лезть в logger_base.h - хуёвая архитектура
+   баги:
    - kill потока руинит работу программы
-*/\
+*/
 
 const int threadsNumber = 30;   // система может ограничивать большое количество потоков
 const int messagesNumber = 20;
@@ -51,6 +52,7 @@ public:
     {
         if(newMessage.type == Threads::Message::Type::stringstream)
             std::cout << "message: " << std::string(newMessage.data);
+        delete[] newMessage.data;
     }
 };
 
@@ -79,6 +81,7 @@ int main()
 {
     SolverLogger logger;
     SolverThread solver[threadsNumber];
+    logger.setReactionTime(500);// время реакции на сигнал о необходимости освобождения логгера в милисекундах
     for(int k = 0; k < iterationsNumber; k++)
     {
         std::cout << std::endl << "Iteration = " << k << std::endl;
@@ -91,14 +94,11 @@ int main()
         //std::this_thread::sleep_for(std::chrono::milliseconds(1));
         for(int i = 0; i < threadsNumber; i++)
             solver[i].signalToRelease();    // просим потоки освободиться
-        logger.signalToRelease();
+        logger.signalToRelease();       // просим логгер освободиться
         for(int i = 0; i < threadsNumber; i++)
             solver[i].release();  // ждём освобождения потоков
         logger.release();   // ждём освобождения логгеcра
-        // ##нужна 1 сикунда полной тишины, чтобы логгер среагировал на signalToRelease
         //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }   // повторяем итерации: повторно создаём логгер и потоки-спиногрызы
-    printf("fix number 1\n");
-    printf("fix number 2\n");
     return 0;
 }

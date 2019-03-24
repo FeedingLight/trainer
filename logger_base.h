@@ -31,6 +31,9 @@ struct Message
 class Logger_base
 {
 public:
+    // изменение времени реакции на сигнал о необходимости освобождения логгера в милисекундах
+    // по умолчанию 1000
+    virtual void setReactionTime(const int set_ReactionTime) = 0;
     // отправка сообщения логгеру
     // сообщение будет находится в очереди, пока не обработается, поэтому лучше выделить память для копии данных в newMessage
     virtual void send(const Message newMessage) = 0;

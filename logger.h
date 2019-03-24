@@ -47,6 +47,7 @@ private:
 class Logger: public Logger_base, public Thread
 {
 public:
+    virtual void setReactionTime(const int set_ReactionTime) override;
     virtual void send(const Message newMessage) override;
     virtual void sendBuffer(std::stringstream &buffer) override;
     virtual ~Logger(){};
@@ -56,6 +57,7 @@ protected:
     std::queue<Message> messagesQueue;  // очередь сообщений
     std::mutex mutex_queue;             // для синхронного доступа к очереди
     std::condition_variable cv_queue;   // для отправки сигнала от потока логгеру, о том, что послано сообщение
+    int reactionTime = 1000;            // время реакции на сигнал о необходимости освобождения логгера
 };
 }   //namespace Threads
 #endif // LOGGER_H

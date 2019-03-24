@@ -56,6 +56,10 @@ void Thread::kill()
     //delete thread;
 }
 
+void Logger::setReactionTime(const int set_ReactionTime)
+{
+    reactionTime = set_ReactionTime;
+}
 void Logger::send(const Message newMessage)
 {
     mutex_queue.lock();
@@ -87,7 +91,7 @@ void Logger::run()
         {
             if(!messagesQueue.empty())
                 break;
-            if(cv_queue.wait_for(locker_queue, std::chrono::milliseconds(1000)) == std::cv_status::timeout)
+            if(cv_queue.wait_for(locker_queue, std::chrono::milliseconds(reactionTime)) == std::cv_status::timeout)
             {
                 //std::cout << "[logger]listen..." << std::endl;
                 if(signal->get_needToReleaseState() == true)
