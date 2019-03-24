@@ -100,5 +100,6 @@ int main()
         //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }   // повторяем итерации: повторно создаём логгер и потоки-спиногрызы
     printf("fix number 1\n");
+    printf("fix number 2\n");
     return 0;
 }
