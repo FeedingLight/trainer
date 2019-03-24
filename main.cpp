@@ -27,7 +27,7 @@ public:
         outStream << "[solver" << id << "]\tstarted" << std::endl;
         logger->sendBuffer(outStream);
         // процесс
-        for(int i = 0; i <= 10; i++)
+        for(int i = 0; i <= messagesNumber; i++)
         {
             if(signal->get_needToReleaseState())
             {
@@ -94,9 +94,8 @@ int main()
         logger.signalToRelease();
         for(int i = 0; i < threadsNumber; i++)
             solver[i].release();  // ждём освобождения потоков
-        logger.release();   // ждём освобождения логгера
-        // нужна 1 сикунда полной тишины, чтобы логгер среагировал на signalToRelease
-        // ## время раздупления - 1 секунда - намертво зашита в логгер
+        logger.release();   // ждём освобождения логгеcра
+        // ##нужна 1 сикунда полной тишины, чтобы логгер среагировал на signalToRelease
         //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }   // повторяем итерации: повторно создаём логгер и потоки-спиногрызы
     printf("fix number 1\n");
