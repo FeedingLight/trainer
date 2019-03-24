@@ -99,8 +99,6 @@ int main()
         // ## время раздупления - 1 секунда - намертво зашита в логгер
         //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }   // повторяем итерации: повторно создаём логгер и потоки-спиногрызы
-    printf("hello\n");
-    printf("hello\n");
-    printf("hello\n");
+    printf("fix number 1\n");
     return 0;
 }
